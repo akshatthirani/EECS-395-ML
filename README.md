@@ -1,2 +1,3 @@
 # EECS-395-ML
-Creating a Machine Learning algorithm in Computer Vision
+
+Machine learning project for binary and multi-class object detection using computer vision techniques.
