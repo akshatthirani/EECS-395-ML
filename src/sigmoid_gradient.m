@@ -1,8 +1,8 @@
-function [ output_args ] = sigmoid_gradient( x, w )
-%UNTITLED4 Summary of this function goes here
-%   Detailed explanation goes here
+function [ gradient ] = sigmoid_gradient( x )
+%sigmoid_gradient Gradient of the sigmoid activiation function in terms of
+%the sigmoid function
 
-
+gradient = sigmoid(x).*(1-sigmoid(x));
 
 end
 

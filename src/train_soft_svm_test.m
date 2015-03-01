@@ -1,6 +1,6 @@
 % Comupte HOG Features for all train_test positive and negative examples
-l_positive = dir('train_test/1/*');
-l_negative = dir('train_test/-1/*');
+l_positive = dir('../data/train_test/1/*');
+l_negative = dir('../data/train_test/-1/*');
 
 N = size(l_positive,1) + size(l_negative,1) - 4;
 b = [ones(size(l_positive,1)-2,1); -1.*ones(size(l_negative,1)-2,1)];
@@ -18,7 +18,7 @@ k = 81;
 
 D = dlmread('D.dat');
 % Train using Soft Margin SVM
-x = train(rand(k,1),D,b,'soft_svm');
+x = train([],D,b,'soft_svm');
 dlmwrite('x.dat',x);
 x
 

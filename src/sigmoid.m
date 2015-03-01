@@ -1,8 +1,7 @@
-function [ activation ] = sigmoid( x, w )
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+function [ activation ] = sigmoid( x )
+%sigmoid Sigmoid activation function defined by 1/(1+exp(-x)
 
-activation = 1./(1+exp(-w'*x));
+activation = 1./(1+exp(-x));
 
 end
 

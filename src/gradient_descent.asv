@@ -26,8 +26,7 @@ while iterations < max_iterations && sum(gradient(gradient > tolerance)) > 0
    x = x - alpha*gradient;
    gradient = cost_gradient(x);
    iterations = iterations + 1;
-   iterations
-   x
+   ite
 end
 
 end
