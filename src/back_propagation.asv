@@ -91,10 +91,10 @@ while error > tolerance
         end
         
         % Update the weights
-        for l=1:(L-1)
-           for j=1:n(l+1)
-              for i=1:n(l)
-                 W{l}(i,j) = W{l}(i,j) - alpha*delta{l}(i)*O{l}(i);
+        for j=1:(L-1)
+           for k=1:n(j+1)
+              for h=1:n(j)
+                 W{j}(h,k) = W{j}(h,k) - alpha*delta{j+1}(k)*O{j}(h); 
               end
            end
         end

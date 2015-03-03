@@ -45,7 +45,7 @@ end
 
 % Kernelized RBF Gaussian
 % k_soft_svm_gradient = @(z)([ 2.*sum(H*z(2:end) + z(1).*ones(N,1)-b); 2.*max(ones(N,1)-b.*(H*z(2:end)+z(1).*ones(N,1)),zeros(N,1)).*(H*b) + lambda.*(H+H')*z(2:end) ]);
-k_soft_svm_gradient = @(z)([ 2.*b'*max(ones(N,1)-diag(b)*(H*z(2:end) + z(1).*ones(N,1)),zeros(N,1)); -2*H*diag(b)*max(ones(N,1)-diag(b)*(H*z(2:end) + z(1).*ones(N,1)),zeros(N,1)) + lambda.*(H+H')*z(2:end) ]);
+k_soft_svm_gradient = @(z)([ -2.*b'*max(ones(N,1)-diag(b)*(H*z(2:end) + z(1).*ones(N,1)),zeros(N,1)); -2*H*diag(b)*max(ones(N,1)-diag(b)*(H*z(2:end) + z(1).*ones(N,1)),zeros(N,1)) + lambda.*(H+H')*z(2:end) ]);
 % k_soft_svm_gradient = @(z)([ 2.*sum(b'*max(zeros(N,1),ones(N,1) - b.*(H*z(2:end) + z(1).*ones(N,1)))); H*(H*z(2:end) + z(1).*ones(N,1) - b) + lambda.*(H+H')*z(2:end) ]);
 
 % Define SVM cost function
