@@ -2,6 +2,8 @@ function [ W ] = back_propagation( X, b, W )
 %back_propagation The back propagation algorithm as described in the paper
 %... (Hinton et. al, 1989)
 
+N = size(X,2);
+assert(N == numel(b));
 L = size(W,1)+1;
 n = zeros(L,1);
 for i=1:size(W)
@@ -9,11 +11,13 @@ for i=1:size(W)
 end
 n(L) = size(W{L-1},2);
 
-alpha = 100e0;
+alpha = 10;
 tolerance = 1e-2;
 estimation = zeros(size(b));
 error = Inf;
 b(b == -1) = 0;
+iterations = 0;
+max_iterations = 10000000;
 
 %% Matrix BP
 % while error > tolerance
@@ -51,58 +55,70 @@ b(b == -1) = 0;
 % end
 
 %% Scalar BP V1
-while error > tolerance
+while error > tolerance && iterations < max_iterations
     
-    for d=1:size(X,2)
+    for d=1:N
         % Compute output layer
-        O = cell(L);
-        I = cell(L);
-        O{1} = X(:,d);
-        I{1} = X(:,d);
+        O = cell(L,1);
+        I = cell(L,1);
+        O{1} = [X(:,d); 1];
+        O{1} = O{1}/norm(O{1});
+        I{1} = O{1};
         
         for j=2:L
-            for k=1:n(j)
+            for k=1:(n(j)-1)
                I{j}(k) = 0;
                for i=1:n(j-1)
                   I{j}(k) = I{j}(k) + W{j-1}(i,k)*O{j-1}(i);
                end
                O{j}(k) = sigmoid(I{j}(k));
             end
+            I{j}(n(j)) = 1;
+            O{j}(n(j)) = 1;
         end
         
         % Compute initial delta
         delta = cell(L-1,1);
-        dEdW = cell(L-1,1);
         delta{L-1} = zeros(n(L-1),1);
-        dEdW{L-1} = zeros(n(L-1),n(L));
-        for k=1:n(L)
-           delta{L-1}(k) = (O{L}(k)-b(k))*sigmoid_gradient(I{L}(k));
+        for j=1:n(L)
+           delta{L-1}(j) = (O{L}(j)-b(j))*O{L}(j)*(1-O{L}(j));
         end
         
         % Compute remaining deltas
-        for j=(L-1):1
-           delta{j} = zeros(n(j));
-           % dEdW{j} = zeros(n(j),n(j+1));
-           for h=1:n(j)
-              for k=1:n(j+1)
-                delta{j}(h) = delta{j}(h) + O{j}(h)*(1-O{j}(h))*delta{j+1}(k)*W{j}(h,k);
+        for l=(L-1):2
+           delta{l-1} = zeros(n(l),1);
+           for j=1:n(l)
+              delta{l-1}(j) = 0;
+              for k=1:n(l+1)
+                delta{l-1}(j) = delta{l-1}(j) + delta{l}(k)*W{l}(j,k);
               end
+              delta{l-1}(j) = delta{l-1}(j)*O{l}(j)*(1-O{l}(j));
            end
         end
         
         % Update the weights
-        for l=1:(L-1)
-           for j=1:n(l+1)
-              for i=1:n(l)
-                 W{l}(i,j) = W{l}(i,j) - alpha*delta{l}(i)*O{l}(i);
+        for l=2:L
+           for j=1:(n(l)-1)
+              for i=1:n(l-1)
+                 W{l-1}(i,j) = W{l-1}(i,j) - alpha*delta{l-1}(j)*I{l-1}(i);
               end
            end
         end
         
-        error = 0.5*(norm(O{L}-b)^2)
-
+        error = error + 0.5*(norm(O{L}-b(d))^2);
+        
     end
     
+    Z = [];
+    for x=1:N
+        Z = [X(:,x); 1];
+        for i=1:L-1
+            Z = [W{i}'*Z; 1];
+        end
+    end
+    
+    iterations = iterations + N
+    error = 0.5*norm(Z(1:(end-1),1) - b)^2
 end
 
 %% Scalar BP V2
