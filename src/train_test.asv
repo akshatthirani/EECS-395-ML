@@ -7,7 +7,7 @@ D = [];
 b = [];
 if strcmp(data_mode, 'generate')
     l_positive = dir(strcat(base_path, 'train/1/*'));
-    l_negative = dir(strcat(base_path, 'train/-1/*'));
+    l_negative = dir('../../data/train/-1/*'));
 
     N = size(l_positive,1) + size(l_negative,1) - 4;
     b = [ones(size(l_positive,1)-2,1); -1.*ones(size(l_negative,1)-2,1)];
