@@ -30,7 +30,6 @@ else
     T = dlmread('T.dat');
     bt = dlmread('bt.dat');
 end
-S = size(T,2);
 
 if strcmp(train_data_mode, 'generate')
     l_positive = dir(strcat(base_path, 'train/1/*'));
@@ -54,8 +53,8 @@ end
 x = dlmread('x.dat');
 
 %% Run Testing
-error_rate = evaluate_error(T, bt, test_mode, x, D, varargin{:});
-fprintf('Total Number of Samples: %d\nTesting Error Rate: %f\n', S, error_rate);
+[error_rate, error_distribution] = evaluate_error(T, bt, test_mode, x, D, varargin{:});
+print_error_statistics(error_distribution);
 
 end
 
