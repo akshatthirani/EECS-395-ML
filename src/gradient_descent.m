@@ -13,7 +13,6 @@ debug = 0;
 alpha = 1e-3;
 max_iterations = 1000000;
 tolerance = 10^-3;
-nargin
 if nargin-n_static_inputs >= 1
     alpha = varargin{1};
 end

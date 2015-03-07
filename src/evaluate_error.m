@@ -9,7 +9,7 @@ if strcmp(model, 'soft_svm')
        D = varargin{1};
     end
     if nargin-n_static_inputs >= 2
-       svm_kmap = generate_kmap(varargin{2}); 
+       svm_kmap = generate_kmap(varargin{2}, varargin{3:end}); 
     end
 end
 
@@ -45,7 +45,7 @@ if nargout >= 1
     varargout{1} = error_rate;
 end
 if nargout >= 2
-    varargout{2} = [tp, tn, fp, fn];
+    varargout{2} = [tp tn, fp, fn];
 end
 
 end
