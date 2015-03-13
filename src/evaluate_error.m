@@ -9,7 +9,8 @@ if strcmp(model, 'soft_svm')
        D = varargin{1};
     end
     if nargin-n_static_inputs >= 2
-       svm_kmap = generate_kmap(varargin{2}, varargin{3:end}); 
+       disp(varargin{2});
+       svm_kmap = generate_kmap(varargin{2}, varargin{3:end});
     end
 end
 
@@ -21,8 +22,14 @@ fp = 0;
 fn = 0;
 for i=1:N
     correct = -1;
-    measure = sign([1 kernelize_feature(D, T(:,i), svm_kmap)]*w);
     if strcmp(model, 'soft_svm')
+       measure = 0;
+       disp([1 T(:,i)']*w);
+       if ~isempty(svm_kmap)
+           measure = sign([1 kernelize_feature(D, T(:,i), svm_kmap)]*w);
+       else
+           measure = sign([1 T(:,i)']*w);
+       end
        correct = measure*bt(i); 
     end
     if correct > 0

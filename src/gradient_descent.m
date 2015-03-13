@@ -5,38 +5,54 @@ function [ x ] = gradient_descent( x, cost_gradient, varargin )
 
 %% Parse Inputs
 n_static_inputs = 2;
-if nargin > 6
-    error('Invalid inputs detected.');
-end
-
+cost = [];
 debug = 0;
 alpha = 1e-3;
 max_iterations = 1000000;
-tolerance = 10^-3;
+tolerance = 1e-3;
 if nargin-n_static_inputs >= 1
-    alpha = varargin{1};
+   cost = varargin{1}; 
 end
 if nargin-n_static_inputs >= 2
-    max_iterations = varargin{2};
+    alpha = varargin{2};
 end
 if nargin-n_static_inputs >= 3
-    tolerance = varargin{3};
+    max_iterations = varargin{3};
 end
 if nargin-n_static_inputs >= 4
-   debug = varargin{4};
+    tolerance = varargin{4};
+end
+if nargin-n_static_inputs >= 5
+   debug = varargin{5};
 end
 
 
 %% Gradient Descent Loop
-iterations = 0;
+iterations = double(0);
 gradient = cost_gradient(x);
+strides = 500;
+alpha_step = 0;
+prev_cost = cost(x);
 while iterations < max_iterations && sum(abs(gradient) > tolerance) > 0
+   if cost(x) > prev_cost 
+       alpha = alpha - alpha_step;
+   else
+       alpha = alpha + alpha_step;
+   end
+   prev_cost = cost(x);
    x = x - alpha*gradient;
+   
    gradient = cost_gradient(x);
    iterations = iterations + 1;
+   it_buffer = iterations;
+   cost_buffer = cost(x);
+   
    if debug
-      disp(gradient);
-      disp(iterations);
+       if mod(iterations, strides) == 0
+        disp(strcat(num2str(it_buffer), ': Cost is [', num2str(cost_buffer),']'));
+        disp(sum(abs(gradient) > tolerance));
+        disp(alpha);
+       end
    end
 end
 

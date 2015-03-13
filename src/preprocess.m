@@ -1,14 +1,27 @@
 function [ O ] = preprocess( I, varargin )
-%UNTITLED6 Summary of this function goes here
-%   Detailed explanation goes here
+%PREPROCESS Using the Tan and Triggs proposed preprocessing pipeline '07
 
-if nargin > 2
-   error('Too many inputs to the function.'); 
+%% Parse Inputs
+n_static_inputs = 1;
+gamma = 0.5;
+tau = 10;
+a = 0.1;
+g_sigma_0 = 1;
+g_sigma_1 = 2;
+if nargin-n_static_inputs >= 1
+   gamma = varargin{1}; 
 end
-
-MAX_LENGTH = 400;
-if nargin == 2
-   MAX_LENGTH = varargin{2};
+if nargin-n_static_inputs >= 2
+   tau = varargin{2}; 
+end
+if nargin-n_static_inputs >= 3
+   a = varargin{3}; 
+end
+if nargin-n_static_inputs >= 3
+   g_sigma_0 = varargin{4}; 
+end
+if nargin-n_static_inputs >= 3
+   g_sigma_1 = varargin{5}; 
 end
 
 if numel(size(I)) == 3
@@ -19,15 +32,28 @@ if numel(size(I)) ~= 2
    error('Invalid image size.');
 end
 
-O = histeq(I);
-K = fspecial('gaussian');
-O = uint8(conv2(double(O),double(K)));
+O =  I;
 
-M = max(size(O));
-if M > MAX_LENGTH
-   scale = MAX_LENGTH/M;
-   O = imresize(O, scale);
+%% Gamma COrrection
+if gamma > 0
+    O = double(O).^gamma;
+else
+    O = log(O); 
 end
 
-end
+%% DoG
+g_kernel_0 = fspecial('gaussian', 3, g_sigma_0);
+g_kernel_1 = fspecial('gaussian', 3, g_sigma_1);
+O = conv2(double(O), double(g_kernel_0)) - conv2(double(O), double(g_kernel_1));
 
+%% Contrast Equalization
+N = numel(O);
+O_transform_0 = abs(O);
+O_transform_1 = max(abs(O).^a, tau);
+O = O./(((sum(sum(abs(O_transform_0).^a)))/N)^(1/a));
+O = O./(((sum(sum(abs(O_transform_1).^a)))/N)^(1/a));
+O_min = min(min(O));
+O_max = max(max(O));
+O = (O-O_min)/(O_max-O_min);
+
+end
