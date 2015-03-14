@@ -141,13 +141,13 @@ end
 % end
 
 fprintf('*****************************************************\n\n');
-fprintf('Linear SVM using HOG Features Rank\n');
+fprintf('Linear SVM using Patch Features Rank\n');
 for i=1:size(lin_patch_rank,2)
    fprintf('%d: %s (%f)\n',i,char(lin_patch_labels{lin_patch_rank{i}}),double(lin_patch_scores{i}));
 end
 
 fprintf('*****************************************************\n\n');
-fprintf('RBF SVM using HOG Features Rank\n');
+fprintf('RBF SVM using Patch Features Rank\n');
 for i=1:size(rbf_patch_rank,2)
    fprintf('%d: %s (%f)\n',i,char(rbf_patch_labels{rbf_patch_rank{i}}),double(rbf_patch_scores{i}));
 end
