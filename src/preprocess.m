@@ -34,7 +34,7 @@ end
 
 O =  I;
 
-%% Gamma COrrection
+%% Gamma Correction
 if gamma > 0
     O = double(O).^gamma;
 else

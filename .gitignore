@@ -1,3 +1,4 @@
 *.asv
 src/test/*
 src/back_propagation.m
+data

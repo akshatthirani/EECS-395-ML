@@ -2,11 +2,11 @@ function [ x ] = train_test( data_mode, train_mode, feature_extractor, varargin 
 %train_test Test different training functions and allow for data reuse
 
 %% Training Initialization
-base_path = '../../data/';
+base_path = '../data/';
 c_t = datestr(datetime('now'));
-c_t(12) = '_';
-c_t(15) = '_';
-c_t(18) = '_';
+c_t(12) = '-';
+c_t(15) = '-';
+c_t(18) = '-';
 
 D = [];
 b = [];
@@ -23,13 +23,13 @@ if strcmp(data_mode, 'generate')
         k = size(F, 1);
         assert(size(F,2) == 1);
         D = zeros(k,N);
-        D(1,:) = F;
+        D(:,1) = F;
     elseif size(l_negative,1) >= 3
         F = feature_extractor(preprocess(imread((strcat(base_path,'train/1/',l_negative(3).name)))));
         k = size(F, 1);
         assert(size(F,2) == 1);
         D = zeros(k,N);
-        D(1,:) = F;
+        D(:,1) = F;
     end
     for i=4:size(l_positive,1)
         D(:,i-2) = feature_extractor(preprocess(imread(strcat(base_path,'train/1/',l_positive(i).name))));

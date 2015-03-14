@@ -1,4 +1,4 @@
-function [ x ] = train_soft_svm( D, b, varargin )
+function [ x, H ] = train_soft_svm( D, b, varargin )
 %train_soft_svm Soft-margin SVM Classifier with Kernel support
 
 %% Parse Inputs
@@ -19,6 +19,11 @@ end
 if nargin-n_static_inputs >= 2
    kernel = varargin{2};
 end
+
+%% Randomize the data
+% r_perm = randperm(N);
+% D = D(:,r_perm);
+% b = b(r_perm);
 
 %% Configure Kernel
 H = zeros(size(D,2));
@@ -44,9 +49,10 @@ end
 x0 = [1; seed];
 options = optimoptions(@fminunc,'Algorithm','quasi-newton');
 soft_svm_cost(x0);
+disp('Beginning soft margin SVM stochastic gradient descent');
 [x,fval,exitflag,output] = fminunc(soft_svm_cost,x0,options);
+disp('SVM weights have finished learning');
+
 % x = gradient_descent(x0, soft_svm_gradient, soft_svm_cost, 1e-3, 10000000, 1, true);
 
-disp('Final Error');
-disp(soft_svm_cost(x));
 end
