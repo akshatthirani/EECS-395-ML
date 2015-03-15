@@ -113,12 +113,12 @@ end
 
 %% HOG Classification
 [lin_hog_rank, lin_hog_scores] = classify(hog_features, lin_hog_weights, lin_hog_labels);
-[rbf_hog_rank, rbf_hog_scores] = classify(hog_features, rbf_hog_weights, rbf_hog_labels, rbf_hog_dtrain, rbf_hog_H, 'rbf', 0);
+[rbf_hog_rank, rbf_hog_scores] = classify(hog_features, rbf_hog_weights, rbf_hog_labels, rbf_hog_dtrain, rbf_hog_H, 'rbf', 1);
 % poly_hog_rank = classify(hog_feautre, poly_hog_weights, poly_hog_labels);
 
 %% Patch Classification
 [lin_patch_rank, lin_patch_scores] = classify(patch_features, lin_patch_weights, lin_patch_labels);
-[rbf_patch_rank, rbf_patch_scores] = classify(patch_features, rbf_patch_weights, rbf_patch_labels, rbf_patch_dtrain, rbf_patch_H, 'rbf', 0);
+[rbf_patch_rank, rbf_patch_scores] = classify(patch_features, rbf_patch_weights, rbf_patch_labels, rbf_patch_dtrain, rbf_patch_H, 'rbf', 1);
 % [poly_patch_rank, poly_patch_scores] = classify(patch_feautres, poly_patch_weights, poly_patch_labels);
 
 %% Pretty Printing Ranks
